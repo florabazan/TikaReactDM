@@ -4,10 +4,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './src/config/firebaseConfig';
-
+import "./src/config/firebaseConfig";
 // Screens de autenticación
 import LoginScreen from './src/screens/LoginScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
+
 
 // Navegación principal (TabNavigator)
 import MainApp from './src/navigation/MainApp';

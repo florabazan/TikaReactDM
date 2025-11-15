@@ -1,27 +1,23 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { guardarTurno } from "../services/turnosService";
+import { guardarObservacion } from "../services/observacionesService";
 
-export default function FormTurnoScreen({ navigation }) {
+export default function FormObservacionScreen({ navigation }) {
   const [form, setForm] = useState({
     paciente: "",
     especialista: "",
     fecha: "",
-    hora: "",
-    notas: ""
+    tipo: "",
+    detalle: ""
   });
 
   const onChange = (name, value) => {
-    if (name === "paciente" || name === "especialista") {
+    if (name === "paciente" || name === "especialista" || name === "tipo") {
       if (!/^[A-Za-zÁÉÍÓÚÑáéíóúñ ]*$/.test(value)) return;
     }
 
     if (name === "fecha") {
       if (!/^[0-9-]*$/.test(value)) return;
-    }
-
-    if (name === "hora") {
-      if (!/^[0-9:]*$/.test(value)) return;
     }
 
     setForm({ ...form, [name]: value });
@@ -32,15 +28,10 @@ export default function FormTurnoScreen({ navigation }) {
     return regex.test(fecha);
   };
 
-  const validarHora = (hora) => {
-    const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
-    return regex.test(hora);
-  };
-
-  
-  const crearTurno = async () => {
-    if (!form.paciente || !form.especialista || !form.fecha || !form.hora) {
-      Alert.alert("Error", "Todos los campos obligatorios deben completarse.");
+  const crear = async () => {
+    // VALIDACIONES
+    if (!form.paciente || !form.especialista || !form.fecha || !form.detalle) {
+      Alert.alert("Error", "Complete todos los campos obligatorios.");
       return;
     }
 
@@ -49,39 +40,44 @@ export default function FormTurnoScreen({ navigation }) {
       return;
     }
 
-    if (!validarHora(form.hora)) {
-      Alert.alert("Hora inválida", "Use el formato HH:MM (ej: 09:30)");
+    if (form.detalle.length < 10) {
+      Alert.alert("Detalle muy corto", "Ingrese al menos 10 caracteres.");
       return;
     }
 
-    //Guardar en Firebase
-    const res = await guardarTurno(form);
+    // 💾 GUARDAR EN FIREBASE
+    const res = await guardarObservacion(form);
+    console.log("Respuesta de guardarObservacion:", res);
 
     if (res.success) {
-      Alert.alert("Éxito", "Turno creado correctamente.");
+      Alert.alert("Éxito", "Observación registrada.");
 
+      // limpiar formulario
       setForm({
         paciente: "",
         especialista: "",
         fecha: "",
-        hora: "",
-        notas: ""
+        tipo: "",
+        detalle: ""
       });
 
-      //Volver a la lista
-      navigation.navigate("TurnosTab", { screen: "ListTurnos" });
+      // volver a la lista
+      navigation.navigate("ObservacionesTab", { screen: "ObservacionesHome" });
     } else {
-      Alert.alert("Error", "No se pudo guardar el turno.");
+      Alert.alert(
+        "Error",
+        res.error ? `No se guardó la observación.\nDetalle: ${res.error}` : "No se guardó la observación."
+      );
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>🩺 Nuevo Turno</Text>
+      <Text style={styles.title}>📝 Nueva Observación</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Nombre del Paciente"
+        placeholder="Paciente"
         value={form.paciente}
         onChangeText={(v) => onChange("paciente", v)}
       />
@@ -102,29 +98,26 @@ export default function FormTurnoScreen({ navigation }) {
 
       <TextInput
         style={styles.input}
-        placeholder="Hora (HH:MM)"
-        value={form.hora}
-        onChangeText={(v) => onChange("hora", v)}
+        placeholder="Tipo (conductual, emocional...)"
+        value={form.tipo}
+        onChangeText={(v) => onChange("tipo", v)}
       />
 
       <TextInput
-        style={[styles.input, { height: 80 }]}
-        placeholder="Notas (opcional)"
+        style={[styles.input, { height: 100 }]}
+        placeholder="Detalle de la observación"
+        value={form.detalle}
         multiline
-        value={form.notas}
-        onChangeText={(v) => onChange("notas", v)}
+        onChangeText={(v) => onChange("detalle", v)}
       />
 
-      <TouchableOpacity style={styles.btn} onPress={crearTurno}>
-        <Text style={styles.btnText}>Crear Turno</Text>
+      <TouchableOpacity style={styles.btn} onPress={crear}>
+        <Text style={styles.btnText}>Guardar Observación</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-// ----------------------
-// ESTILO TIKA 
-// ----------------------
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -134,24 +127,23 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    textAlign: "center",
     color: "#6a1b9a",
-    marginVertical: 20,
+    textAlign: "center",
+    marginBottom: 20,
   },
   input: {
     backgroundColor: "#fff",
     borderColor: "#d7b7f7",
     borderWidth: 2,
-    marginBottom: 15,
-    padding: 12,
     borderRadius: 12,
+    padding: 12,
     fontSize: 16,
+    marginBottom: 15,
   },
   btn: {
     backgroundColor: "#a74ac7",
     padding: 15,
     borderRadius: 30,
-    marginTop: 10,
   },
   btnText: {
     textAlign: "center",

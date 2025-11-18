@@ -12,8 +12,7 @@ import PacientesScreen from '../screens/PacientesScreen';
 import FormPacienteScreen from "../screens/FormPacienteScreen";
 import ComprobantesScreen from "../screens/ComprobantesScreen";
 import CrearComprobanteScreen from "../screens/CrearComprobanteScreen";
-import ObservacionesScreen from "../screens/ObservacionesScreen";
-import FormObservacionScreen from "../screens/FormObservacionScreen";
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -56,18 +55,6 @@ function ComprobantesStack() {
 }
 
 /* -------------------------
-      STACK OBSERVACIONES
--------------------------- */
-function ObservacionesStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="ObservacionesHome" component={ObservacionesScreen} />
-      <Stack.Screen name="FormObservacion" component={FormObservacionScreen} />
-    </Stack.Navigator>
-  );
-}
-
-/* -------------------------
       STACK DEL PERFIL
 -------------------------- */
 function PerfilStack() {
@@ -95,7 +82,6 @@ export default function MainApp() {
 
           if (route.name === 'TurnosTab') iconName = 'calendar';
           else if (route.name === 'PacientesTab') iconName = 'people';
-          else if (route.name === 'ObservacionesTab') iconName = 'document-text';   // ⭐ ICONO AGREGADO
           else if (route.name === 'ComprobantesTab') iconName = 'receipt';
           else if (route.name === 'PerfilTab') iconName = 'person';
 
@@ -105,10 +91,6 @@ export default function MainApp() {
     >
       <Tab.Screen name="TurnosTab" component={TurnosStack} options={{ title: 'Turnos' }} />
       <Tab.Screen name="PacientesTab" component={PacientesStack} options={{ title: 'Pacientes' }} />
-
-      {/* NUEVA PESTAÑA OBSERVACIONES */}
-      <Tab.Screen name="ObservacionesTab" component={ObservacionesStack} options={{ title: "Observaciones" }} />
-
       <Tab.Screen name="ComprobantesTab" component={ComprobantesStack} options={{ title: 'Comprobantes' }} />
       <Tab.Screen name="PerfilTab" component={PerfilStack} options={{ title: 'Perfil' }} />
     </Tab.Navigator>

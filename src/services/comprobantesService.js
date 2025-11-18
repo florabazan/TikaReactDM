@@ -28,3 +28,20 @@ export const guardarComprobante = async (data) => {
     return { success: false, error };
   }
 };
+export const obtenerComprobantes = async () => {
+  try {
+    const comprobantesRef = collection(db, "comprobantes");
+    const snapshot = await getDocs(comprobantesRef);
+
+    let lista = [];
+    snapshot.forEach((doc) => {
+      lista.push({ id: doc.id, ...doc.data() });
+    });
+
+    return lista;
+
+  } catch (error) {
+    console.log("ERROR al obtener comprobantes:", error);
+    return [];
+  }
+};

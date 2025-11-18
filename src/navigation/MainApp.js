@@ -4,9 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 
 // PANTALLAS
-import ListTurnosScreen from '../screens/ListTurnosScreen';
-import FormTurnoScreen from '../screens/FormTurnoScreen';
-import DetailTurnoScreen from '../screens/DetailTurnoScreen';
+import TurnosScreen from "../screens/TurnosScreen";
 import Home from '../screens/Home';
 import PacientesScreen from '../screens/PacientesScreen';
 import FormPacienteScreen from "../screens/FormPacienteScreen";
@@ -16,19 +14,6 @@ import CrearComprobanteScreen from "../screens/CrearComprobanteScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
-
-/* ----------------------------------------
-   STACK DE TURNOS (LISTA → DETALLE → FORM)
------------------------------------------ */
-function TurnosStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="ListTurnos" component={ListTurnosScreen} />
-      <Stack.Screen name="DetailTurno" component={DetailTurnoScreen} />
-      <Stack.Screen name="FormTurno" component={FormTurnoScreen} />
-    </Stack.Navigator>
-  );
-}
 
 /* -------------------------
       STACK PACIENTES
@@ -89,7 +74,7 @@ export default function MainApp() {
         }
       })}
     >
-      <Tab.Screen name="TurnosTab" component={TurnosStack} options={{ title: 'Turnos' }} />
+      <Tab.Screen name="TurnosTab" component={TurnosScreen} options={{ title: 'Turnos' }} />
       <Tab.Screen name="PacientesTab" component={PacientesStack} options={{ title: 'Pacientes' }} />
       <Tab.Screen name="ComprobantesTab" component={ComprobantesStack} options={{ title: 'Comprobantes' }} />
       <Tab.Screen name="PerfilTab" component={PerfilStack} options={{ title: 'Perfil' }} />

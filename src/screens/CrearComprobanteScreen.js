@@ -133,7 +133,7 @@ export default function CrearComprobanteScreen() {
 }
 
 // ----------------------------
-// ESTILOS TIKA 💜
+// ESTILOS TIKA
 // ----------------------------
 const styles = StyleSheet.create({
   container: {
